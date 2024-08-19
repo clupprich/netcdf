@@ -15,12 +15,12 @@ defmodule NetCDF.Native do
     version: version,
     force_build: force_build,
     targets: [
-      "aarch64-unknown-linux-gnu",
-      "aarch64-apple-darwin",
-      "x86_64-apple-darwin",
-      "x86_64-unknown-linux-gnu"
+      "aarch64-apple-darwin"
     ],
-    mode: mode
+    mode: mode,
+    nif_versions: [
+      "2.17"
+    ]
 
   # netcdf::file
   def file_open(_filename), do: :erlang.nif_error(:nif_not_loaded)

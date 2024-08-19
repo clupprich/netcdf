@@ -10,7 +10,7 @@ path = "src/lib.rs"
 crate-type = ["cdylib"]
 
 [dependencies]
-rustler = { version = "0.34.0", default-features = false, features = ["derive", "nif_version_2_15"] }
+rustler = { version = "0.34.0", default-features = false, features = ["derive", "nif_version_2_17"] }
 netcdf = { version = "0.8.1", features = ["static"] }
 thiserror = "1"
 ndarray = "0.15.6"
