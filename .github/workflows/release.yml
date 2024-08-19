@@ -22,10 +22,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Install Conda
-        uses: s-weigand/setup-conda@v1
+      - name: Setup Python 3.8
+        uses: actions/setup-python@v2
         with:
-          conda-channels: conda-forge
+          python-version: 3.8
       - name: Extract project version
         shell: bash
         run: |
@@ -36,15 +36,22 @@ jobs:
         with:
           toolchain: stable
           target: ${{ matrix.job.target }}
+      - name: Setup Conda
+        if: ${{ matrix.job.os != 'macos-latest' }}
+        run: |
+          mkdir -p ~/miniconda3
+          curl https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh -o ~/miniconda3/miniconda.sh
+          bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
+          rm -rf ~/miniconda3/miniconda.sh
       - name: Install dependencies
-        if: ${{ matrix.job.os != 'macos-11' }}
+        if: ${{ matrix.job.os != 'macos-latest' }}
         run: |
           conda install -y -c conda-forge libnetcdf=4.9.2 hdf5=1.14.3
           echo "HDF5_DIR=${CONDA_PREFIX}"
           echo "NETCDF_DIR=${CONDA_PREFIX}" >> $GITHUB_ENV
           echo "RUSTFLAGS=-C link-args=-Wl,-rpath,$CONDA_PREFIX/lib" >> $GITHUB_ENV
       - name: Install dependencies (Mac)
-        if: ${{ matrix.job.os == 'macos-11' }}
+        if: ${{ matrix.job.os == 'macos-latest' }}
         run: brew install nco
       - name: Build the project
         id: build-crate
