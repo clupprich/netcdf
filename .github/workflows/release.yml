@@ -4,8 +4,8 @@ on:
     types: [published]
 
 env:
-  RUST_TOOLCHAIN_VERSION: nightly-2022-08-16
   MIX_ENV: prod
+  RUST_TOOLCHAIN_VERSION: 1.80.1
   NETCDF_BUILD: true
 
 jobs:
@@ -15,10 +15,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        nif: ["2.15", "2.16"]
+        nif: ["2.17"]
         job:
-          - { target: x86_64-apple-darwin, os: macos-11 }
-          - { target: x86_64-unknown-linux-gnu, os: ubuntu-20.04 }
+          - { target: x86_64-apple-darwin, os: macos-latest }
+          - { target: x86_64-unknown-linux-gnu, os: ubuntu-latest }
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -39,7 +39,7 @@ jobs:
       - name: Install dependencies
         if: ${{ matrix.job.os != 'macos-11' }}
         run: |
-          conda install -y -c conda-forge libnetcdf=4.8.1 hdf5=1.12.1
+          conda install -y -c conda-forge libnetcdf=4.9.2 hdf5=1.14.3
           echo "HDF5_DIR=${CONDA_PREFIX}"
           echo "NETCDF_DIR=${CONDA_PREFIX}" >> $GITHUB_ENV
           echo "RUSTFLAGS=-C link-args=-Wl,-rpath,$CONDA_PREFIX/lib" >> $GITHUB_ENV

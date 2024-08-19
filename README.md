@@ -45,7 +45,7 @@ On macOS:
 Conda can also be used to install the dependencies instead:
 
 ```shell
-conda install -y -c conda-forge libnetcdf=4.8.1 hdf5=1.12.1
+conda install -y -c conda-forge libnetcdf=4.9.2 hdf5=1.14.3
 echo "HDF5_DIR=${CONDA_PREFIX}"
 echo "NETCDF_DIR=${CONDA_PREFIX}" >> $GITHUB_ENV
 echo "RUSTFLAGS=-C link-args=-Wl,-rpath,$CONDA_PREFIX/lib" >> $GITHUB_ENV
