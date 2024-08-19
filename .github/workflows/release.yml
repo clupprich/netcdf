@@ -18,14 +18,9 @@ jobs:
         nif: ["2.17"]
         job:
           - { target: x86_64-apple-darwin, os: macos-latest }
-          - { target: x86_64-unknown-linux-gnu, os: ubuntu-latest }
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Setup Python 3.8
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
       - name: Extract project version
         shell: bash
         run: |
@@ -36,26 +31,11 @@ jobs:
         with:
           toolchain: stable
           target: ${{ matrix.job.target }}
-      - name: Setup Conda
-        if: ${{ matrix.job.os != 'macos-latest' }}
-        run: |
-          mkdir -p ~/miniconda3
-          curl https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh -o ~/miniconda3/miniconda.sh
-          bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
-          rm -rf ~/miniconda3/miniconda.sh
-      - name: Install dependencies
-        if: ${{ matrix.job.os != 'macos-latest' }}
-        run: |
-          conda install -y -c conda-forge libnetcdf=4.9.2 hdf5=1.14.3
-          echo "HDF5_DIR=${CONDA_PREFIX}"
-          echo "NETCDF_DIR=${CONDA_PREFIX}" >> $GITHUB_ENV
-          echo "RUSTFLAGS=-C link-args=-Wl,-rpath,$CONDA_PREFIX/lib" >> $GITHUB_ENV
       - name: Install dependencies (Mac)
-        if: ${{ matrix.job.os == 'macos-latest' }}
         run: brew install nco
       - name: Build the project
         id: build-crate
-        uses: philss/rustler-precompiled-action@v1.0.0
+        uses: philss/rustler-precompiled-action@v1.1.4
         with:
           project-name: ex_netcdf
           project-version: ${{ env.PROJECT_VERSION }}
