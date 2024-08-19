@@ -176,6 +176,11 @@ fn variable_load(ex_file: NetCDFFile, variable_name: &str) -> Result<NetCDFVaria
 
 fn parse_variable_attribute(attr: Attribute) -> (String, Value) {
     let name = attr.name().to_string();
+
+    if (name == "_FillValue") {
+        return (name, Value::Atom(nil()));
+    }
+
     let value = match attr.value() {
         Err(_) => Value::Atom(nil()),
         Ok(attr_value) => Value::from(attr_value),
