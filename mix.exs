@@ -1,7 +1,7 @@
 defmodule NetCDF.MixProject do
   use Mix.Project
 
-  @source_url "https://github.com/DockYard/netcdf"
+  @source_url "https://github.com/clupprich/netcdf"
   @version File.read!(Path.join(__DIR__, "VERSION")) |> String.trim()
 
   def project do
